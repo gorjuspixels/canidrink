@@ -1,4 +1,4 @@
-import {TITLE_CHANGED, PROFILE_CREATED, SHOW_FORM, SAVE_DRINKS} from '../constants/ActionTypes';
+import {TITLE_CHANGED, PROFILE_CREATED, SHOW_FORM, SAVE_DRINKS, PROFILE_UPDATED} from '../constants/ActionTypes';
 
 const changeTitle = text => ({
   type: TITLE_CHANGED,
@@ -10,6 +10,15 @@ const createProfile = profile => {
 
   return {
     type: PROFILE_CREATED,
+    profile
+  }
+}
+
+const updateProfile = profile => {
+  // TODO: server side to update profile
+
+  return {
+    type: PROFILE_UPDATED,
     profile
   }
 }
@@ -28,4 +37,4 @@ const showForm = () => ({
   type: SHOW_FORM
 })
 
-export {createProfile, showForm, changeTitle}
+export {createProfile, showForm, changeTitle, updateProfile}

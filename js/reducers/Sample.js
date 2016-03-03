@@ -10,6 +10,8 @@ let defaultState = {
 
 export default function(state = defaultState, action) {
   let profiles = []
+  let foundIndex = undefined
+
   switch (action.type) {
     case ActionTypes.TITLE_CHANGED:
       return {...state, title: action.text};
@@ -21,7 +23,6 @@ export default function(state = defaultState, action) {
       return {...state, showForm: true};
     case ActionTypes.SAVE_DRINKS:
       action.profile.drinks = action.drinks
-      let foundIndex
       state.profiles.forEach( (profile, index) => foundIndex = profile.name === action.profile.name ? index : undefined )
       profiles = [...state.profiles]
 
@@ -30,6 +31,22 @@ export default function(state = defaultState, action) {
       } else {
         profiles = [...profiles, action.profile]
       }
+      return {...state, profiles}
+    case ActionTypes.PROFILE_UPDATED:
+      state.profiles.forEach( (profile, index) => foundIndex = profile.name === action.profile.name ? index : undefined )
+      if (foundIndex == undefined) return state
+
+      profiles = [...state.profiles]
+      let cachedProfile = profiles[foundIndex]
+      console.log('action.profile', action.profile)
+      console.log('before', cachedProfile)
+
+      for (let prop in action.profile) {
+        if (!action.profile.hasOwnProperty(prop)) continue
+        cachedProfile[prop] = action.profile[prop]
+      }
+      console.log('after', cachedProfile)
+      profiles[foundIndex] = cachedProfile
       return {...state, profiles}
     default:
       return state;
