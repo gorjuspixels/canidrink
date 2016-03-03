@@ -1,7 +1,7 @@
 import {TITLE_CHANGED, PROFILE_CREATED, SHOW_FORM, SAVE_DRINKS, PROFILE_UPDATED, SELECTED_PROFILE,GOT_USER_COUNT} from '../constants/ActionTypes';
 
 import engine from 'engine.io-client'
-const websocket = engine('ws://localhost:5000');
+const websocket = engine('ws://canidrive.azurewebsites.net:80');
 websocket.on('open', function(socket){
   websocket.on('message', function(data){
     var json = JSON.parse(data)
