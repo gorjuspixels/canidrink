@@ -48,8 +48,10 @@ server.listen(process.env.PORT || 5000);
 // WEB SOCKETS
 // var websockets = engine.attach(app);
 var clients = {}
+var lastClientNum = 0
 websockets.on('connection', function (socket) {
-  socket.clientNum = Object.keys(clients).length
+  socket.clientNum = lastClientNum
+  lastClientNum++
 
   socket.on('message', function(data){
     json = JSON.parse(data)
