@@ -47,7 +47,32 @@ server.listen(process.env.PORT || 5000);
 
 // WEB SOCKETS
 // var websockets = engine.attach(app);
+var clients = {}
 websockets.on('connection', function (socket) {
-  socket.on('message', function(data){ });
-  socket.on('close', function(){ });
+  socket.clientNum = Object.keys(clients).length
+
+  socket.on('message', function(data){
+    json = JSON.parse(data)
+    switch(json.method) {
+      case 'getUserCount': return socket.send(JSON.stringify({method: 'gotUserCount', data: Object.keys(clients).length}))
+    }
+  });
+
+  clients[socket.clientNum] = socket
+  var total = Object.keys(clients).length
+  for (var clientNum in clients) {
+    if (!clients.hasOwnProperty(clientNum)) continue
+    if (clientNum === socket.clientNum) continue
+    clients[clientNum].send(JSON.stringify({method: 'gotUserCount', data: total}))
+  }
+
+  socket.on('close', function(){
+    delete clients[this.clientNum]
+    var total = Object.keys(clients).length
+
+    for (var clientNum in clients) {
+      if (!clients.hasOwnProperty(clientNum)) continue
+      clients[clientNum].send(JSON.stringify({method: 'gotUserCount', data: total}))
+    }
+  });
 });

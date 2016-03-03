@@ -1,4 +1,18 @@
-import {TITLE_CHANGED, PROFILE_CREATED, SHOW_FORM, SAVE_DRINKS, PROFILE_UPDATED, SELECTED_PROFILE} from '../constants/ActionTypes';
+import {TITLE_CHANGED, PROFILE_CREATED, SHOW_FORM, SAVE_DRINKS, PROFILE_UPDATED, SELECTED_PROFILE,GOT_USER_COUNT} from '../constants/ActionTypes';
+
+import engine from 'engine.io-client'
+const websocket = engine('ws://localhost:5000');
+websocket.on('open', function(socket){
+  websocket.on('message', function(data){
+    var json = JSON.parse(data)
+    switch(json.method) {
+      case 'gotUserCount': return _dispatch(gotUserCount(json.data))
+    }
+  });
+  websocket.on('close', function(){});
+});
+
+let _dispatch
 
 const changeTitle = text => ({
   type: TITLE_CHANGED,
@@ -42,4 +56,20 @@ const selectProfile = profile => ({
   profile
 })
 
-export {createProfile, showForm, changeTitle, updateProfile, selectProfile, saveDrinks}
+const getUserCount = () => {
+  return dispatch => {
+    _dispatch = dispatch
+    websocket.send(JSON.stringify({
+      method: 'getUserCount'
+    }))
+  }
+}
+
+const gotUserCount = count => {
+  return {
+    type: GOT_USER_COUNT,
+    count
+  }
+}
+
+export {createProfile, showForm, changeTitle, updateProfile, selectProfile, saveDrinks, getUserCount}

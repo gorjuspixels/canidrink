@@ -9,15 +9,12 @@ import Main from './Main'
 import DrinkSelection from './DrinkSelection'
 import IconButton from 'material-ui/lib/icon-button';
 
-import socket from 'engine.io-client'
-const websocket = socket('ws://localhost:5000');
-websocket.on('open', function(){
-  websocket.on('message', function(data){});
-  websocket.on('close', function(){});
-});
-
 injectTapEventPlugin();
 class Home extends Component {
+
+  componentDidMount() {
+    this.props.dispatch(HomeActions.getUserCount())
+  }
 
   renderContent() {
     const { title } = this.props;
@@ -35,6 +32,15 @@ class Home extends Component {
     }}>arrow_back</IconButton>
   };
 
+  getUserCount = () => {
+    return (
+      <div style={{ color: '#fff', marginRight: '20px' }}>
+        <span style={{ verticalAlign: 'middle' }}>{ this.props.userCount }</span>
+        <IconButton iconStyle={{ color: '#fff' }} style={{ verticalAlign: 'middle' }} tooltip={ `${ this.props.userCount } user(s) online` } iconClassName="material-icons">face</IconButton>
+      </div>
+    )
+  }
+
   render() {
     const {title, dispatch} = this.props;
     const actions = bindActionCreators(HomeActions, dispatch);
@@ -50,7 +56,7 @@ class Home extends Component {
     }
     return (
       <main>
-        <AppBar title={ title } showMenuIconButton={ !!barButton } iconElementLeft={ barButton } iconClassNameLeft="" />
+        <AppBar title={ title } showMenuIconButton={ !!barButton } iconElementLeft={ barButton } iconElementRight={ this.getUserCount() } iconClassNameLeft="" />
 
         <div style={ styles.main }>
           { this.renderContent() }

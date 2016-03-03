@@ -7,3 +7,4 @@ export const PROFILE_UPDATED = 'PROFILE_UPDATED';
 export const SHOW_FORM = 'SHOW_FORM';
 export const SAVE_DRINKS = 'SAVE_DRINKS';
 export const SELECTED_PROFILE = 'SELECTED_PROFILE';
+export const GOT_USER_COUNT = 'GOT_USER_COUNT';

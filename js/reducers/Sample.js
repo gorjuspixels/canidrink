@@ -6,7 +6,8 @@ let defaultState = {
   bac: 0,
   profiles: [],
   showForm: true,
-  selectedProfile: undefined
+  selectedProfile: undefined,
+  userCount: 1
 };
 
 export default function(state = defaultState, action) {
@@ -56,6 +57,8 @@ export default function(state = defaultState, action) {
 
       state.profiles.forEach( (profile, index) => foundIndex = profile.name === action.profile.name ? index : undefined )
       return {...state, selectedProfile: foundIndex};
+    case ActionTypes.GOT_USER_COUNT:
+      return {...state, userCount: action.count}
     default:
       return state;
   }
