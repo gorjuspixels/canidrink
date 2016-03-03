@@ -1,0 +1,9 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+.text {
+  font-size: 2rem;
+  line-height: 1.5;
+  color: #FF0000;
+}

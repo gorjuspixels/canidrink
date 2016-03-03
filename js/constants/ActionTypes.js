@@ -1,0 +1,7 @@
+export const DATA_FETCHED = 'DATA_FETCHED';
+export const DATA_SUCCEEDED = 'DATA_SUCCEEDED';
+export const DATA_FAILED = 'DATA_FAILED';
+export const TITLE_CHANGED = 'TITLE_CHANGED';
+export const PROFILE_CREATED = 'PROFILE_CREATED';
+export const SHOW_FORM = 'SHOW_FORM';
+export const SAVE_DRINKS = 'SAVE_DRINKS';
