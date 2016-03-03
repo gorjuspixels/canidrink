@@ -1,9 +1,10 @@
 var path = require('path');
 var express = require('express');
 var app = express();
+var webpack = require("webpack");
+
 
 if (process.env.DEBUG) {
-  var webpack = require('webpack');
   var config = require('./webpack.config');
   var compiler = webpack(config);
   app.use(require('webpack-dev-middleware')(compiler, {
@@ -13,6 +14,11 @@ if (process.env.DEBUG) {
   }));
 
   app.use(require('webpack-hot-middleware')(compiler));
+} else {
+  var config = require('./webpack.production');
+  webpack(config, function(err, stats) {
+    if (err) console.error(err)
+  });
 }
 
 app.get('/static/bundle.js', function(req, res) {
