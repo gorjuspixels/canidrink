@@ -1,12 +1,11 @@
 var path = require('path');
-var webpack = require('webpack');
 var express = require('express');
-var config = require('./webpack.config');
-
 var app = express();
-var compiler = webpack(config);
 
 if (process.env.DEBUG) {
+  var webpack = require('webpack');
+  var config = require('./webpack.config');
+  var compiler = webpack(config);
   app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,
     publicPath: config.output.publicPath,
@@ -16,6 +15,12 @@ if (process.env.DEBUG) {
   app.use(require('webpack-hot-middleware')(compiler));
 }
 
+app.get('/static/bundle.js', function(req, res) {
+  res.sendFile(path.join(__dirname, 'dist/bundle.js'));
+})
+app.get('/static/app.css', function(req, res) {
+  res.sendFile(path.join(__dirname, 'dist/app.css'));
+})
 app.get('*', function(req, res) {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -25,5 +30,5 @@ app.listen(process.env.PORT || 5000, 'localhost', function (err, result) {
     console.log(err);
   }
 
-  console.log('Listening at localhost:' + process.env.PORT || 5000);
+  console.log('Listening at localhost:' + (process.env.PORT || 5000));
 });

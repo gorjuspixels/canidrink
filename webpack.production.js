@@ -6,6 +6,8 @@ var devFlagPlugin = new webpack.DefinePlugin({
   __DEV__: JSON.stringify(JSON.parse(process.env.DEBUG || 'false'))
 });
 
+console.log('building for', process.env.NODE_ENV)
+
 module.exports = {
   entry: [
     './js/index.js'
@@ -16,6 +18,9 @@ module.exports = {
     filename: 'bundle.js',
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': '"production"',
+    }),
     new webpack.NoErrorsPlugin(),
     devFlagPlugin,
     new ExtractTextPlugin('app.css')
