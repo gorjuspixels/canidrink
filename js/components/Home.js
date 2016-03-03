@@ -9,6 +9,13 @@ import Main from './Main'
 import DrinkSelection from './DrinkSelection'
 import IconButton from 'material-ui/lib/icon-button';
 
+import socket from 'engine.io-client'
+const websocket = socket('ws://localhost:5000');
+websocket.on('open', function(){
+  websocket.on('message', function(data){});
+  websocket.on('close', function(){});
+});
+
 injectTapEventPlugin();
 class Home extends Component {
 
