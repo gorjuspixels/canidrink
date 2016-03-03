@@ -17,11 +17,11 @@ app.use(require('webpack-hot-middleware')(compiler));
 app.get('*', function(req, res) {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
-  
-app.listen(5000, 'localhost', function (err, result) {
+
+app.listen(process.env.PORT || 5000, 'localhost', function (err, result) {
   if (err) {
     console.log(err);
   }
 
-  console.log('Listening at localhost:5000');
+  console.log('Listening at localhost:' + process.env.PORT || 5000);
 });
