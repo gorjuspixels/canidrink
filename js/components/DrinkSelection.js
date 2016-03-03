@@ -46,13 +46,20 @@ class DrinkSelection extends Component {
       }
     ]
 
+    const { profiles, selectedProfile } = this.props
+    const profile = profiles[selectedProfile]
+
     return (
       <Paper zDepth={1} style={ styles.paper }>
         { drinks.map((drink, index) => {
           if (index + 1 < drinks.length) {
-            return [<Drink key={ drink.name } {...drink} />, <Divider style={ styles.divider } />]
+            return [<Drink key={ drink.name } {...drink}
+                      profile={ profile } dispatch={ dispatch }  />,
+                    <Divider style={ styles.divider } />
+                   ]
           }
-          return <Drink key={ drink.name } {...drink} />
+          return <Drink key={ drink.name } {...drink}
+                    profile={ profile } dispatch={ dispatch }  />
         })}
       </Paper>
     );

@@ -2,11 +2,17 @@ import React, {Component} from 'react';
 import IconButton from 'material-ui/lib/icon-button';
 import SelectField from 'material-ui/lib/select-field';
 import MenuItem from 'material-ui/lib/menus/menu-item';
-
+import { saveDrinks } from '../actions/HomeActions'
 
 class Drink extends Component {
 
-  handleChange = () => {};
+  handleChange = (event, drinkCount) => {
+    const { dispatch, profile, name } = this.props
+    let drinks = {}
+    drinks[this.props.name.toLowerCase().replace('liquor/', '')] = drinkCount
+
+    dispatch(saveDrinks(this.props.profile, drinks));
+  }
 
   render() {
     const styles = {
@@ -25,9 +31,10 @@ class Drink extends Component {
     }
 
     const { name, ac, sizeOZ, sizeML } = this.props
+    const { drinks } = this.props.profile
     const numbers = []
     for (let i=0; i<21; i++) {
-      numbers.push(<MenuItem value={i+1} primaryText={ i }/>)
+      numbers.push(<MenuItem value={i} primaryText={ i }/>)
     }
 
     return (
@@ -38,7 +45,7 @@ class Drink extends Component {
           <div style={ styles.text }>{ `${sizeOZ}oz / ${sizeML}ml` }</div>
         </div>
 
-        <SelectField value={1} onChange={this.handleChange}
+        <SelectField value={ drinks[name.toLowerCase().replace('liquor/', '')] } onChange={this.handleChange}
           floatingLabelText="# of drinks">
           { numbers }
         </SelectField>

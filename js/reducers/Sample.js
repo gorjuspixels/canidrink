@@ -5,12 +5,14 @@ let defaultState = {
   title: defaultTitle,
   bac: 0,
   profiles: [],
-  showForm: true
+  showForm: true,
+  selectedProfile: undefined
 };
 
 export default function(state = defaultState, action) {
   let profiles = []
   let foundIndex = undefined
+  let cachedProfile = undefined
 
   switch (action.type) {
     case ActionTypes.TITLE_CHANGED:
@@ -22,32 +24,38 @@ export default function(state = defaultState, action) {
     case ActionTypes.SHOW_FORM:
       return {...state, showForm: true};
     case ActionTypes.SAVE_DRINKS:
-      action.profile.drinks = action.drinks
       state.profiles.forEach( (profile, index) => foundIndex = profile.name === action.profile.name ? index : undefined )
       profiles = [...state.profiles]
 
-      if (foundIndex != undefined) {
-        profiles[foundIndex] = action.profile
-      } else {
-        profiles = [...profiles, action.profile]
+      if (foundIndex == undefined) return state
+
+      cachedProfile = profiles[foundIndex]
+      for (let prop in action.drinks) {
+        if (!action.drinks.hasOwnProperty(prop)) continue
+        cachedProfile.drinks[prop] = action.drinks[prop]
       }
+
+      profiles[foundIndex] = cachedProfile
+
       return {...state, profiles}
     case ActionTypes.PROFILE_UPDATED:
       state.profiles.forEach( (profile, index) => foundIndex = profile.name === action.profile.name ? index : undefined )
       if (foundIndex == undefined) return state
 
       profiles = [...state.profiles]
-      let cachedProfile = profiles[foundIndex]
-      console.log('action.profile', action.profile)
-      console.log('before', cachedProfile)
+      cachedProfile = profiles[foundIndex]
 
       for (let prop in action.profile) {
         if (!action.profile.hasOwnProperty(prop)) continue
         cachedProfile[prop] = action.profile[prop]
       }
-      console.log('after', cachedProfile)
       profiles[foundIndex] = cachedProfile
       return {...state, profiles}
+    case ActionTypes.SELECTED_PROFILE:
+      if (!action.profile) return {...state, selectedProfile: undefined}
+
+      state.profiles.forEach( (profile, index) => foundIndex = profile.name === action.profile.name ? index : undefined )
+      return {...state, selectedProfile: foundIndex};
     default:
       return state;
   }

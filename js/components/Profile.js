@@ -4,7 +4,7 @@ import SelectField from 'material-ui/lib/select-field';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import RaisedButton from 'material-ui/lib/raised-button';
 import ClearFix from 'material-ui/lib/clearfix';
-import { createProfile, updateProfile, changeTitle } from '../actions/HomeActions';
+import { createProfile, updateProfile, changeTitle, selectProfile } from '../actions/HomeActions';
 import IconButton from 'material-ui/lib/icon-button';
 import Colors from 'material-ui/lib/styles/colors';
 
@@ -101,7 +101,7 @@ class Profile extends Component {
           <IconButton
             style={{ display: 'inline-block', verticalAlign: 'middle' }}
             iconClassName="material-icons"
-            onClick={ () => dispatch(changeTitle(`${name}'s Drinks`)) }>keyboard_arrow_right</IconButton>
+            onClick={ () => {dispatch(selectProfile(this.props.profile)); dispatch(changeTitle(`${name}'s Drinks`)) }}>keyboard_arrow_right</IconButton>
         </div>
       </div>
     )
@@ -117,13 +117,17 @@ class Profile extends Component {
     const { gender, weight, drinks, hours } = this.props.profile
     const genders = ['female', 'male']
     const numStandard = drinks.beer + drinks.wine + drinks.spirit
+    const GRAMS_IN_POUND = 453.592
+    const STANDARD_DRINK_GRAMS = 13.5
+    const gramWeight = weight * GRAMS_IN_POUND
+    const gramDrink = numStandard * STANDARD_DRINK_GRAMS
 
     const GENDER_CONSTANT = {
       male: 0.68,
       female: 0.55
     }
 
-    const bac = (numStandard / (weight * GENDER_CONSTANT[genders[gender-1]])) * 100 - (hours * 0.015)
+    const bac = (gramDrink / (gramWeight * GENDER_CONSTANT[genders[gender-1]])) * 100 - (hours * 0.015)
     if (bac < 0) return (0).toFixed(2)
 
     return bac.toFixed(2)

@@ -1,4 +1,4 @@
-import {TITLE_CHANGED, PROFILE_CREATED, SHOW_FORM, SAVE_DRINKS, PROFILE_UPDATED} from '../constants/ActionTypes';
+import {TITLE_CHANGED, PROFILE_CREATED, SHOW_FORM, SAVE_DRINKS, PROFILE_UPDATED, SELECTED_PROFILE} from '../constants/ActionTypes';
 
 const changeTitle = text => ({
   type: TITLE_CHANGED,
@@ -37,4 +37,9 @@ const showForm = () => ({
   type: SHOW_FORM
 })
 
-export {createProfile, showForm, changeTitle, updateProfile}
+const selectProfile = profile => ({
+  type: SELECTED_PROFILE,
+  profile
+})
+
+export {createProfile, showForm, changeTitle, updateProfile, selectProfile, saveDrinks}

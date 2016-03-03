@@ -19,10 +19,13 @@ class Home extends Component {
   }
 
   getBarButton = () => {
-    const { title } = this.props;
+    const { title, dispatch } = this.props;
     if (title === 'Can I drive yet?') return null;
 
-    return <IconButton iconClassName="material-icons">arrow_back</IconButton>
+    return <IconButton iconClassName="material-icons" onClick={ () => {
+      dispatch(HomeActions.selectProfile())
+      dispatch(HomeActions.changeTitle('Can I drive yet?'))
+    }}>arrow_back</IconButton>
   };
 
   render() {
